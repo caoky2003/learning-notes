@@ -7,11 +7,13 @@
 ## 当前内容
 
 - [ASOT 风格 Trance 制作](notes/asot-trance/) — James Dymond，15 节课程。
-- [Markdown 原文](content/asot-trance.md)
+- [ASOT Markdown 原文](content/asot-trance.md)
+- [The Complete Trance Tutorial](notes/signature-trance/) — Signature Sound / Metta & Glyde，10 节课程与配套讲义归纳。
+- [Signature Sound Markdown 原文](content/signature-trance.md)
 
 ## 更新现有笔记
 
-1. 修改 `content/asot-trance.md`。
+1. 修改 `content/` 中对应的 Markdown。
 2. 在 PowerShell 7 中执行 `./scripts/build.ps1`，生成网页。
 3. 提交 Markdown 和生成的 HTML，推送到 `main`。
 
@@ -19,7 +21,7 @@ GitHub Pages 从 `main` 分支根目录发布，无需服务器或第三方前�
 
 ## 添加新课程
 
-将 Markdown 放到 `content/`，为新课程生成独立的 `notes/课程名/index.html`，并在首页增加课程入口。现有构建脚本目前只生成 ASOT 笔记，可在增加第二篇时扩展。
+将 Markdown 放到 `content/`，在 `scripts/build.ps1` 的 `$courses` 列表登记课程信息，执行脚本生成独立的 `notes/课程名/index.html`，并在首页增加课程入口与更新篇数。构建脚本会生成所有已登记课程。
 
 ## 内容范围
 

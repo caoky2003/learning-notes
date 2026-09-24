@@ -1,7 +1,12 @@
 $ErrorActionPreference = 'Stop'
 $siteRoot = Split-Path $PSScriptRoot -Parent
-$sourcePath = Join-Path $siteRoot 'content/asot-trance.md'
-$outputDir = Join-Path $siteRoot 'notes/asot-trance'
+$courses = @(
+    @{ Slug = 'asot-trance'; Title = 'ASOT 风格 Trance 制作'; Heading = 'ASOT 风格<br class="title-break">Trance 制作'; Deck = 'James Dymond · 从低频基础到完整编曲'; Count = 15; Duration = '4 小时 14 分钟'; Description = 'James Dymond ASOT 风格 Trance 制作学习笔记：15 节课程重点、回看时间、参数速查和练习计划。' },
+    @{ Slug = 'signature-trance'; Title = 'The Complete Trance Tutorial'; Heading = 'The Complete<br class="title-break">Trance Tutorial'; Deck = 'Signature Sound · Metta & Glyde · 从旋律写作到完整混音'; Count = 10; Duration = '6 小时 38 分钟'; Description = 'Signature Sound 完整 Trance 制作学习笔记：10 节课程、回看时间、配套讲义要点、低频与空间排错、六次跟做计划。' }
+)
+foreach ($course in $courses) {
+$sourcePath = Join-Path $siteRoot ('content/' + $course.Slug + '.md')
+$outputDir = Join-Path $siteRoot ('notes/' + $course.Slug)
 New-Item -ItemType Directory -Path $outputDir -Force | Out-Null
 $body = (ConvertFrom-Markdown -LiteralPath $sourcePath).Html
 $toc = [Collections.Generic.List[string]]::new()
@@ -49,6 +54,13 @@ $template = @'
 </body>
 </html>
 '@
+$template = $template.Replace('James Dymond ASOT 风格 Trance 制作学习笔记：15 节课程重点、回看时间、参数速查和练习计划。', $course.Description)
+$template = $template.Replace('ASOT 风格 Trance 制作 · 学习笔记', $course.Title + ' · 学习笔记')
+$template = $template.Replace('ASOT 风格<br class="title-break">Trance 制作', $course.Heading)
+$template = $template.Replace('James Dymond · 从低频基础到完整编曲', $course.Deck)
+$template = $template.Replace('15 节课程', [string]$course.Count + ' 节课程').Replace('4 小时 14 分钟', $course.Duration)
+$template = $template.Replace('content/asot-trance.md', 'content/' + $course.Slug + '.md')
 $output = $template.Replace('{{TOC}}', ($toc -join "`n")).Replace('{{BODY}}', $body)
 [IO.File]::WriteAllText((Join-Path $outputDir 'index.html'), $output, [Text.UTF8Encoding]::new($false))
-Write-Output ('Generated ASOT note: {0} sections.' -f $headings.Count)
+Write-Output ('Generated {0}: {1} sections.' -f $course.Slug, $headings.Count)
+}
